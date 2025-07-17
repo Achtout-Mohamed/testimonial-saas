@@ -183,6 +183,7 @@ export default function DashboardContent() {
             >
               🎨 Widget Generator
             </button>
+            
             <button
               onClick={handleSignOut}
               style={{
@@ -365,125 +366,13 @@ export default function DashboardContent() {
                   padding: '8px 16px',
                   border: 'none',
                   borderRadius: '6px',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  background: filter === filterType ? '#3b82f6' : '#e5e7eb',
-                  color: filter === filterType ? 'white' : '#374151',
-                  transition: 'all 0.2s'
+                  fontSize: '14px'
                 }}
               >
-                {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
+                {filterType}
               </button>
             ))}
           </div>
-        </div>
-
-        {/* Testimonials List */}
-        <div style={{ display: 'grid', gap: '20px' }}>
-          {filteredTestimonials.length === 0 ? (
-            <div style={{ 
-              background: 'white', 
-              padding: '60px 20px', 
-              borderRadius: '12px', 
-              textAlign: 'center',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
-            }}>
-              <div style={{ fontSize: '48px', marginBottom: '16px' }}>📝</div>
-              <h3 style={{ color: '#6b7280', fontSize: '18px', marginBottom: '8px' }}>
-                {filter === 'all' ? 'No testimonials yet' : `No ${filter} testimonials`}
-              </h3>
-              <p style={{ color: '#9ca3af', fontSize: '14px' }}>
-                Share your collection link with customers to start collecting testimonials
-              </p>
-            </div>
-          ) : (
-            filteredTestimonials.map((testimonial) => (
-              <div key={testimonial.id} style={{ 
-                background: 'white', 
-                padding: '24px', 
-                borderRadius: '12px',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-                border: testimonial.approved ? '2px solid #d1fae5' : '2px solid #fef3c7'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-                  <div>
-                    <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1f2937', marginBottom: '4px' }}>
-                      {testimonial.customer_name}
-                    </h3>
-                    <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '8px' }}>
-                      {testimonial.customer_email}
-                    </p>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <div>
-                        {'⭐'.repeat(testimonial.rating)}
-                      </div>
-                      <span style={{ fontSize: '14px', color: '#6b7280' }}>
-                        ({testimonial.rating}/5)
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    {!testimonial.approved && (
-                      <button
-                        onClick={() => approveTestimonial(testimonial.id)}
-                        style={{
-                          background: '#059669',
-                          color: 'white',
-                          border: 'none',
-                          padding: '6px 12px',
-                          borderRadius: '6px',
-                          fontSize: '12px',
-                          cursor: 'pointer',
-                          fontWeight: '500'
-                        }}
-                      >
-                        ✓ Approve
-                      </button>
-                    )}
-                    
-                    {testimonial.approved && (
-                      <button
-                        onClick={() => rejectTestimonial(testimonial.id)}
-                        style={{
-                          background: '#dc2626',
-                          color: 'white',
-                          border: 'none',
-                          padding: '6px 12px',
-                          borderRadius: '6px',
-                          fontSize: '12px',
-                          cursor: 'pointer',
-                          fontWeight: '500'
-                        }}
-                      >
-                        ✗ Reject
-                      </button>
-                    )}
-                    
-                    <span style={{
-                      background: testimonial.approved ? '#d1fae5' : '#fef3c7',
-                      color: testimonial.approved ? '#065f46' : '#92400e',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                      fontWeight: '500'
-                    }}>
-                      {testimonial.approved ? 'Approved' : 'Pending'}
-                    </span>
-                  </div>
-                </div>
-                
-                <p style={{ color: '#374151', lineHeight: '1.6', marginBottom: '12px' }}>
-                  "{testimonial.message}"
-                </p>
-                
-                <p style={{ color: '#9ca3af', fontSize: '12px' }}>
-                  Submitted: {new Date(testimonial.created_at).toLocaleDateString()} at {new Date(testimonial.created_at).toLocaleTimeString()}
-                </p>
-              </div>
-            ))
-          )}
         </div>
       </div>
     </div>
