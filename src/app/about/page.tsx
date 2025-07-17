@@ -178,107 +178,145 @@ export default function AboutPage() {
        </section>
 
        {/* Team Section */}
-       <section style={{
-         padding: '80px 20px',
-         maxWidth: '800px',
-         margin: '0 auto'
-       }}>
-         <h2 style={{
-           fontSize: '36px',
-           fontWeight: '700',
-           textAlign: 'center',
-           color: '#1f2937',
-           marginBottom: '48px'
-         }}>
-           Meet the Founder
-         </h2>
-         
-         <div style={{
-           background: 'white',
-           padding: '48px',
-           borderRadius: '16px',
-           boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-           textAlign: 'center'
-         }}>
-           <div style={{
-             width: '120px',
-             height: '120px',
-             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-             borderRadius: '50%',
-             display: 'flex',
-             alignItems: 'center',
-             justifyContent: 'center',
-             fontSize: '48px',
-             margin: '0 auto 24px',
-             color: 'white'
-           }}>
-             👨‍💻
-           </div>
-           
-           <h3 style={{
-             fontSize: '24px',
-             fontWeight: '700',
-             color: '#1f2937',
-             marginBottom: '8px'
-           }}>
-             Mohamed Achtout
-           </h3>
-           
-           <p style={{
-             color: '#6b7280',
-             fontSize: '16px',
-             marginBottom: '24px'
-           }}>
-             Founder & Developer
-           </p>
-           
-           <p style={{
-             color: '#374151',
-             lineHeight: '1.6',
-             marginBottom: '24px'
-           }}>
-             Hey! I'm Mohamed, a developer from Morocco who loves building tools that help small 
-             businesses succeed. When I'm not coding, you'll find me helping other entrepreneurs 
-             or exploring new technologies.
-           </p>
-           
-           <div style={{
-             display: 'flex',
-             gap: '16px',
-             justifyContent: 'center',
-             flexWrap: 'wrap'
-           }}>
-             <a 
-               href="mailto:achtoutmohamed08@gmail.com"
-               style={{
-                 background: '#3b82f6',
-                 color: 'white',
-                 padding: '8px 16px',
-                 borderRadius: '6px',
-                 textDecoration: 'none',
-                 fontSize: '14px',
-                 fontWeight: '500'
-               }}
-             >
-               📧 Email Me
-             </a>
-             <a 
-               href="https://wa.me/212611110589"
-               style={{
-                 background: '#25d366',
-                 color: 'white',
-                 padding: '8px 16px',
-                 borderRadius: '6px',
-                 textDecoration: 'none',
-                 fontSize: '14px',
-                 fontWeight: '500'
-               }}
-             >
-               📱 WhatsApp
-             </a>
-           </div>
-         </div>
-       </section>
+<section style={{
+  padding: '80px 20px',
+  maxWidth: '800px',
+  margin: '0 auto'
+}}>
+  <h2 style={{
+    fontSize: '36px',
+    fontWeight: '700',
+    textAlign: 'center',
+    color: '#1f2937',
+    marginBottom: '48px'
+  }}>
+    Meet the Founder
+  </h2>
+  
+  <div style={{
+    background: 'white',
+    padding: '48px',
+    borderRadius: '16px',
+    boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+    textAlign: 'center'
+  }}>
+    <div style={{
+      width: '150px',
+      height: '150px',
+      margin: '0 auto 24px',
+      borderRadius: '50%',
+      overflow: 'hidden',
+      border: '5px solid #3b82f6',
+      boxShadow: '0 8px 32px rgba(59, 130, 246, 0.3)'
+    }}>
+      <img 
+        src="/images/me.jpg" 
+        alt="Mohamed Achtout - Founder & Developer"
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover'
+        }}
+        onError={(e) => {
+          const parent = e.currentTarget.parentElement;
+          if (parent) {
+            parent.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            parent.style.display = 'flex';
+            parent.style.alignItems = 'center';
+            parent.style.justifyContent = 'center';
+            parent.style.fontSize = '64px';
+            parent.style.color = 'white';
+            parent.innerHTML = '👨‍💻';
+          }
+        }}
+      />
+    </div>
+    
+    <h3 style={{
+      fontSize: '28px',
+      fontWeight: '700',
+      color: '#1f2937',
+      marginBottom: '8px'
+    }}>
+      Mohamed Achtout
+    </h3>
+    
+    <p style={{
+      color: '#3b82f6',
+      fontSize: '18px',
+      fontWeight: '600',
+      marginBottom: '24px'
+    }}>
+      Founder & Developer
+    </p>
+    
+    <div style={{
+      background: '#f0f9ff',
+      padding: '20px',
+      borderRadius: '12px',
+      marginBottom: '24px',
+      border: '1px solid #bfdbfe'
+    }}>
+      <p style={{
+        color: '#374151',
+        lineHeight: '1.8',
+        fontSize: '16px',
+        margin: 0
+      }}>
+
+        Hey! I'm Mohamed, a passionate developer from Morocco who loves building tools that help small 
+        businesses succeed. With expertise in modern web technologies and a deep understanding of 
+        business needs, I created TestimonialPro to solve the real problem of collecting authentic 
+
+        customer feedback. When I'm not coding, you'll find me helping other entrepreneurs 
+        or exploring new technologies that can make business operations simpler and more effective.
+      </p>
+    </div>
+    
+    <div style={{
+      display: 'flex',
+      gap: '16px',
+      justifyContent: 'center',
+      flexWrap: 'wrap'
+    }}>
+      <a 
+        href="mailto:achtoutmohamed08@gmail.com"
+        style={{
+          background: '#3b82f6',
+          color: 'white',
+          padding: '12px 20px',
+          borderRadius: '8px',
+          textDecoration: 'none',
+          fontSize: '14px',
+          fontWeight: '500',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}
+      >
+        📧 Email Me
+      </a>
+      <a 
+        href="https://wa.me/212611110589"
+        style={{
+          background: '#25d366',
+          color: 'white',
+          padding: '12px 20px',
+          borderRadius: '8px',
+          textDecoration: 'none',
+          fontSize: '14px',
+          fontWeight: '500',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}
+      >
+        📱 WhatsApp
+      </a>
+      
+    </div>
+  </div>
+</section>
 
        {/* CTA Section */}
        <section style={{
