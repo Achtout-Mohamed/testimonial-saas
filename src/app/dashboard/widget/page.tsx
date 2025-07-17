@@ -34,9 +34,9 @@ function WidgetGeneratorContent() {
     getUser()
   }, [])
 
-  const loadApprovedTestimonials = async (userId: string) => {
+  const loadApprovedTestimonials = async (userIdParam: string) => {
     try {
-      const response = await fetch(`/api/testimonials/widget?userId=${userId}&limit=${settings.maxTestimonials}`)
+      const response = await fetch(`/api/testimonials/widget?userId=${userIdParam}&limit=${settings.maxTestimonials}`)
       const data = await response.json()
       
       if (Array.isArray(data)) {
@@ -57,13 +57,48 @@ function WidgetGeneratorContent() {
     if (!user) return ''
     
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+    const widgetId = `widget-${user.id}-${Date.now()}`
     
-    return `<!-- Testimonial Widget -->
+    return `<!-- TestimonialPro Widget with Analytics -->
 <div id="testimonial-widget-${user.id}"></div>
 <script>
 (function() {
   const widgetId = 'testimonial-widget-${user.id}';
+  const userId = '${user.id}';
   const apiUrl = '${baseUrl}/api/testimonials/widget?userId=${user.id}&limit=${settings.maxTestimonials}';
+  const analyticsUrl = '${baseUrl}/api/analytics/widgets';
+  const widgetInstanceId = '${widgetId}';
+  
+  // Generate session ID for this widget instance
+  function generateSessionId() {
+    return 'widget_session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  }
+  
+  const sessionId = generateSessionId();
+  
+  // Analytics tracking function
+  function trackWidgetEvent(eventType, properties = {}) {
+    fetch(analyticsUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: userId,
+        widgetId: widgetInstanceId,
+        eventType: eventType,
+        websiteDomain: window.location.hostname,
+        referrer: document.referrer,
+        sessionId: sessionId,
+        properties: {
+          ...properties,
+          url: window.location.href,
+          timestamp: new Date().toISOString()
+        }
+      })
+    }).catch(err => console.debug('Widget analytics:', err));
+  }
+  
+  // Track widget load
+  trackWidgetEvent('widget_load');
   
   fetch(apiUrl)
     .then(response => response.json())
@@ -71,39 +106,175 @@ function WidgetGeneratorContent() {
       const widget = document.getElementById(widgetId);
       if (!widget) return;
       
+      if (testimonials.length === 0) {
+        widget.innerHTML = \`
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 20px; text-align: center; color: #6b7280;">
+            <p>No testimonials available yet.</p>
+          </div>
+        \`;
+        return;
+      }
+      
+      // Track widget view (when testimonials are displayed)
+      trackWidgetEvent('widget_view', { 
+        testimonialCount: testimonials.length,
+        averageRating: (testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length).toFixed(1)
+      });
+      
       const widgetHTML = \`
-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px;">
-          <h3 style="color: #1f2937; margin-bottom: 20px; font-size: 20px; font-weight: 600;">
-            What Our Customers Say
-          </h3>
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px; gap: 8px;">
+            <h3 style="color: ${settings.theme === 'dark' ? '#f9fafb' : '#1f2937'}; margin: 0; font-size: 20px; font-weight: 600;">
+              What Our Customers Say
+            </h3>
+            <div style="background: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;">
+              \${testimonials.length} review\${testimonials.length !== 1 ? 's' : ''}
+            </div>
+          </div>
           <div style="display: grid; gap: 16px;">
-            \${testimonials.map(t => \`
-              <div style="background: ${settings.theme === 'dark' ? '#1f2937' : '#ffffff'}; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid ${settings.theme === 'dark' ? '#374151' : '#e5e7eb'};">
-                <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                  <div style="color: #fbbf24;">\${'⭐'.repeat(t.rating)}</div>
-                  <span style="margin-left: 8px; font-weight: 600; color: ${settings.theme === 'dark' ? '#f9fafb' : '#1f2937'};">\${t.customer_name}</span>
-                  ${settings.showEmail ? `<span style="margin-left: 8px; color: #6b7280; font-size: 14px;">(\${t.customer_email})</span>` : ''}
+            \${testimonials.map((t, index) => \`
+              <div 
+                class="testimonial-card" 
+                data-testimonial-id="\${t.id}"
+                style="
+                  background: ${settings.theme === 'dark' ? '#1f2937' : '#ffffff'}; 
+                  padding: 20px; 
+                  border-radius: 12px; 
+                  box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+                  border: 1px solid ${settings.theme === 'dark' ? '#374151' : '#e5e7eb'};
+                  transition: all 0.2s ease;
+                  cursor: pointer;
+                  position: relative;
+                  overflow: hidden;
+                "
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)';"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';"
+                onclick="handleTestimonialClick('\${t.id}', \${index})"
+              >
+                <div style="display: flex; align-items: center; margin-bottom: 12px; justify-content: space-between;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="color: #fbbf24; font-size: 16px;">\${'⭐'.repeat(t.rating)}</div>
+                    <span style="font-weight: 600; color: ${settings.theme === 'dark' ? '#f9fafb' : '#1f2937'};">\${t.customer_name}</span>
+                    ${settings.showEmail ? `<span style="color: #6b7280; font-size: 14px;">(\${t.customer_email})</span>` : ''}
+                  </div>
+                  <div style="background: #f0f9ff; color: #1e40af; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 500;">
+                    VERIFIED
+                  </div>
                 </div>
-                <p style="color: ${settings.theme === 'dark' ? '#d1d5db' : '#374151'}; line-height: 1.6; margin: 0;">
+                <p style="
+                  color: ${settings.theme === 'dark' ? '#d1d5db' : '#374151'}; 
+                  line-height: 1.6; 
+                  margin: 0 0 12px 0;
+                  font-style: italic;
+                ">
                   "\${t.message}"
                 </p>
-                <div style="margin-top: 8px; font-size: 12px; color: #9ca3af;">
-                  \${new Date(t.created_at).toLocaleDateString()}
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-size: 12px; color: #9ca3af;">
+                    \${new Date(t.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </div>
+                  <div style="font-size: 11px; color: #10b981; font-weight: 500;">
+                    ✓ Verified Review
+                  </div>
                 </div>
               </div>
             \`).join('')}
+          </div>
+          
+          <!-- Widget Footer -->
+          <div style="
+            text-align: center; 
+            margin-top: 20px; 
+            padding: 12px; 
+            background: ${settings.theme === 'dark' ? '#374151' : '#f8fafc'}; 
+            border-radius: 8px;
+            border: 1px solid ${settings.theme === 'dark' ? '#4b5563' : '#e5e7eb'};
+          ">
+            <div style="font-size: 12px; color: #6b7280; margin-bottom: 4px;">
+              Powered by TestimonialPro
+            </div>
+            <div style="font-size: 11px; color: #9ca3af;">
+              Authentic customer feedback
+            </div>
           </div>
         </div>
       \`;
       
       widget.innerHTML = widgetHTML;
+      
+      // Add click tracking to testimonials
+      window.handleTestimonialClick = function(testimonialId, index) {
+        trackWidgetEvent('testimonial_click', { 
+          testimonialId: testimonialId,
+          position: index + 1,
+          totalTestimonials: testimonials.length
+        });
+        
+        // Optional: Add custom behavior here (e.g., open modal, redirect, etc.)
+        console.log('Testimonial clicked:', testimonialId);
+      };
+      
+      // Track widget visibility when it comes into view
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            trackWidgetEvent('widget_visible', {
+              visibilityRatio: entry.intersectionRatio
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      
+      observer.observe(widget);
+      
     })
     .catch(error => {
       console.error('Error loading testimonials:', error);
-      document.getElementById(widgetId).innerHTML = '<p style="color: #ef4444;">Error loading testimonials</p>';
+      const widget = document.getElementById(widgetId);
+      if (widget) {
+        widget.innerHTML = \`
+          <div style="
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+            padding: 20px; 
+            text-align: center; 
+            color: #ef4444;
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            border-radius: 8px;
+          ">
+            <p style="margin: 0;">Unable to load testimonials at this time.</p>
+          </div>
+        \`;
+      }
+      
+      trackWidgetEvent('widget_error', { 
+        error: error.message || 'Unknown error'
+      });
     });
 })();
-</script>`
+</script>
+
+<!-- Optional: Add some CSS for better animations -->
+<style>
+  .testimonial-card {
+    transition: all 0.2s ease !important;
+  }
+  
+  .testimonial-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  #testimonial-widget-${user.id} > div {
+    animation: fadeIn 0.5s ease-out;
+  }
+</style>`
   }
 
   const copyToClipboard = (text: string) => {
@@ -196,7 +367,7 @@ function WidgetGeneratorContent() {
             fontSize: '14px',
             color: '#374151'
           }}>
-            {`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/collect/${user?.id || 'loading...'}`}
+            {user ? `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/collect/${user.id}` : 'Loading...'}
           </div>
           <p style={{ color: '#6b7280', fontSize: '12px', marginTop: '8px' }}>
             Share this link with your customers to collect testimonials

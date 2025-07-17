@@ -1,8 +1,11 @@
+// src/components/DashboardContent.tsx - Enhanced with Analytics
 'use client'
 import { useEffect, useState } from 'react'
 import { createSupabaseComponentClient } from '@/lib/supabase'
 import { User } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
+import { usePageTracking } from '@/lib/analytics'
+import AnalyticsDashboard from './AnalyticsDashboard'
 
 interface Testimonial {
   id: string
@@ -20,8 +23,12 @@ export default function DashboardContent() {
   const [filter, setFilter] = useState<'all' | 'approved' | 'pending'>('all')
   const [user, setUser] = useState<User | null>(null)
   const [testimonialCount, setTestimonialCount] = useState(0)
+  const [activeTab, setActiveTab] = useState<'overview' | 'testimonials' | 'analytics'>('overview')
   const router = useRouter()
   const supabase = createSupabaseComponentClient()
+
+  // Track page view
+  usePageTracking(user, 'dashboard_main')
 
   useEffect(() => {
     const getUser = async () => {
@@ -76,6 +83,18 @@ export default function DashboardContent() {
 
       if (response.ok) {
         loadTestimonials(user!.id)
+        
+        // Track approval action
+        await fetch('/api/analytics/events', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: user!.id,
+            eventType: 'testimonial_action',
+            eventName: 'testimonial_approved',
+            properties: { testimonialId: id }
+          })
+        })
       } else {
         console.error('Error approving testimonial')
       }
@@ -94,6 +113,18 @@ export default function DashboardContent() {
 
       if (response.ok) {
         loadTestimonials(user!.id)
+        
+        // Track rejection action
+        await fetch('/api/analytics/events', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: user!.id,
+            eventType: 'testimonial_action',
+            eventName: 'testimonial_rejected',
+            properties: { testimonialId: id }
+          })
+        })
       } else {
         console.error('Error rejecting testimonial')
       }
@@ -161,7 +192,7 @@ export default function DashboardContent() {
         }}>
           <div>
             <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#1f2937', marginBottom: '8px' }}>
-              📊 Testimonial Dashboard
+              📊 Dashboard
             </h1>
             <p style={{ color: '#6b7280' }}>
               Welcome back, {user?.user_metadata?.name || user?.email}!
@@ -202,178 +233,336 @@ export default function DashboardContent() {
           </div>
         </div>
 
-        {/* Collection Link */}
-        <div style={{ 
-          background: 'white', 
-          padding: '20px 30px', 
-          borderRadius: '12px',
+        {/* Tab Navigation */}
+        <div style={{
+          background: 'white',
+          padding: '20px 30px 0',
+          borderRadius: '12px 12px 0 0',
           boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-          marginBottom: '30px'
+          marginBottom: '0'
         }}>
-          <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1f2937', marginBottom: '12px' }}>
-            📎 Your Collection Link
-          </h3>
-          <div style={{ 
-            background: '#f8fafc', 
-            padding: '12px 16px', 
-            borderRadius: '6px',
-            border: '1px solid #e5e7eb',
-            fontFamily: 'monospace',
-            fontSize: '14px',
-            color: '#374151'
+          <div style={{
+            display: 'flex',
+            gap: '24px',
+            borderBottom: '1px solid #e5e7eb'
           }}>
-            {`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/collect/${user?.id}`}
-          </div>
-          <p style={{ color: '#6b7280', fontSize: '12px', marginTop: '8px' }}>
-            Share this link with your customers to collect testimonials
-          </p>
-        </div>
-
-        {/* Usage Tracking */}
-        <div style={{ 
-          background: 'white', 
-          padding: '20px 30px', 
-          borderRadius: '12px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-          marginBottom: '30px'
-        }}>
-          <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1f2937', marginBottom: '12px' }}>
-            📊 Your Usage (Free Plan)
-          </h3>
-          
-          <div style={{ marginBottom: '16px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ color: '#6b7280' }}>Testimonials</span>
-              <span style={{ color: '#374151', fontWeight: '500' }}>
-                {testimonialCount}/10
-              </span>
-            </div>
-            <div style={{ 
-              width: '100%', 
-              height: '8px', 
-              background: '#e5e7eb', 
-              borderRadius: '4px',
-              overflow: 'hidden'
-            }}>
-              <div style={{ 
-                width: `${Math.min((testimonialCount / 10) * 100, 100)}%`, 
-                height: '100%', 
-                background: testimonialCount >= 10 ? '#dc2626' : '#3b82f6',
-                transition: 'width 0.3s'
-              }} />
-            </div>
-          </div>
-          
-          {testimonialCount >= 10 && (
-            <div style={{ 
-              background: '#fef3c7', 
-              border: '1px solid #f59e0b',
-              padding: '12px 16px',
-              borderRadius: '8px',
-              marginTop: '12px'
-            }}>
-              <p style={{ color: '#92400e', fontSize: '14px', margin: 0 }}>
-                ⚠️ You've reached your free plan limit. 
-                <strong> Contact us to upgrade for unlimited testimonials!</strong>
-              </p>
-            </div>
-          )}
-          
-          <div style={{ marginTop: '16px' }}>
-            <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937', marginBottom: '8px' }}>
-              🎯 Ready to Upgrade? Get in Touch!
-            </h4>
-            
-            <div style={{ 
-              background: '#f8fafc', 
-              padding: '16px', 
-              borderRadius: '8px',
-              border: '1px solid #e5e7eb'
-            }}>
-              <p style={{ fontSize: '14px', color: '#374151', marginBottom: '12px', fontWeight: '500' }}>
-                Contact us to unlock unlimited testimonials:
-              </p>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '16px' }}>📧</span>
-                  <span style={{ fontSize: '14px', color: '#6b7280' }}>Email:</span>
-                  <a 
-                    href={`mailto:achtoutmohamed08@gmail.com?subject=Testimonial SaaS Upgrade&body=Hi, I'd like to upgrade my account (${user?.email}) to unlimited testimonials.`}
-                    style={{ color: '#3b82f6', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}
-                  >
-                    achtoutmohamed08@gmail.com
-                  </a>
-                </div>
-                
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '16px' }}>📱</span>
-                  <span style={{ fontSize: '14px', color: '#6b7280' }}>WhatsApp:</span>
-                  <a 
-                    href="https://wa.me/212611110589?text=Hi%2C%20I%27m%20interested%20in%20upgrading%20my%20testimonial%20account"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: '#10b981', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}
-                  >
-                    +212 611110589
-                  </a>
-                </div>
-                
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '16px' }}>⚡</span>
-                  <span style={{ fontSize: '14px', color: '#6b7280' }}>Response time:</span>
-                  <span style={{ fontSize: '14px', color: '#059669', fontWeight: '500' }}>
-                    Within 24 hours
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '40px' }}>
-          <div style={{ background: 'white', padding: '24px', borderRadius: '12px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
-            <div style={{ fontSize: '24px', fontWeight: '700', color: '#3b82f6', marginBottom: '4px' }}>
-              {stats.total}
-            </div>
-            <div style={{ color: '#6b7280', fontSize: '14px' }}>Total Testimonials</div>
-          </div>
-          
-          <div style={{ background: 'white', padding: '24px', borderRadius: '12px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
-            <div style={{ fontSize: '24px', fontWeight: '700', color: '#059669', marginBottom: '4px' }}>
-              {stats.approved}
-            </div>
-            <div style={{ color: '#6b7280', fontSize: '14px' }}>Approved</div>
-          </div>
-          
-          <div style={{ background: 'white', padding: '24px', borderRadius: '12px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
-            <div style={{ fontSize: '24px', fontWeight: '700', color: '#dc2626', marginBottom: '4px' }}>
-              {stats.pending}
-            </div>
-            <div style={{ color: '#6b7280', fontSize: '14px' }}>Pending Review</div>
-          </div>
-        </div>
-
-        {/* Filter Buttons */}
-        <div style={{ marginBottom: '30px' }}>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            {(['all', 'approved', 'pending'] as const).map((filterType) => (
+            {[
+              { id: 'overview', label: '📋 Overview', icon: '📋' },
+              { id: 'testimonials', label: '💬 Testimonials', icon: '💬' },
+              { id: 'analytics', label: '📊 Analytics', icon: '📊' }
+            ].map(tab => (
               <button
-                key={filterType}
-                onClick={() => setFilter(filterType)}
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
                 style={{
-                  padding: '8px 16px',
+                  background: 'none',
                   border: 'none',
-                  borderRadius: '6px',
-                  fontSize: '14px'
+                  padding: '12px 0',
+                  fontSize: '16px',
+                  fontWeight: '500',
+                  color: activeTab === tab.id ? '#3b82f6' : '#6b7280',
+                  borderBottom: activeTab === tab.id ? '2px solid #3b82f6' : '2px solid transparent',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
                 }}
               >
-                {filterType}
+                {tab.label}
               </button>
             ))}
           </div>
         </div>
+
+        {/* Tab Content */}
+        <div style={{
+          background: 'white',
+          padding: '30px',
+          borderRadius: '0 0 12px 12px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
+          minHeight: '500px'
+        }}>
+          {activeTab === 'overview' && (
+            <div>
+              {/* Collection Link */}
+              <div style={{ marginBottom: '30px' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1f2937', marginBottom: '12px' }}>
+                  📎 Your Collection Link
+                </h3>
+                <div style={{ 
+                  background: '#f8fafc', 
+                  padding: '12px 16px', 
+                  borderRadius: '6px',
+                  border: '1px solid #e5e7eb',
+                  fontFamily: 'monospace',
+                  fontSize: '14px',
+                  color: '#374151'
+                }}>
+                  {`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/collect/${user?.id}`}
+                </div>
+                <p style={{ color: '#6b7280', fontSize: '12px', marginTop: '8px' }}>
+                  Share this link with your customers to collect testimonials
+                </p>
+              </div>
+
+              {/* Usage Tracking */}
+              <div style={{ marginBottom: '30px' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1f2937', marginBottom: '12px' }}>
+                  📊 Your Usage (Free Plan)
+                </h3>
+                
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <span style={{ color: '#6b7280' }}>Testimonials</span>
+                    <span style={{ color: '#374151', fontWeight: '500' }}>
+                      {testimonialCount}/10
+                    </span>
+                  </div>
+                  <div style={{ 
+                    width: '100%', 
+                    height: '8px', 
+                    background: '#e5e7eb', 
+                    borderRadius: '4px',
+                    overflow: 'hidden'
+                  }}>
+                    <div style={{ 
+                      width: `${Math.min((testimonialCount / 10) * 100, 100)}%`, 
+                      height: '100%', 
+                      background: testimonialCount >= 10 ? '#dc2626' : '#3b82f6',
+                      transition: 'width 0.3s'
+                    }} />
+                  </div>
+                </div>
+                
+                {testimonialCount >= 10 && (
+                  <div style={{ 
+                    background: '#fef3c7', 
+                    border: '1px solid #f59e0b',
+                    padding: '12px 16px',
+                    borderRadius: '8px',
+                    marginTop: '12px'
+                  }}>
+                    <p style={{ color: '#92400e', fontSize: '14px', margin: 0 }}>
+                      ⚠️ You've reached your free plan limit. 
+                      <strong> Contact us to upgrade for unlimited testimonials!</strong>
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Quick Stats */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
+                <div style={{ background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
+                  <div style={{ fontSize: '24px', fontWeight: '700', color: '#3b82f6', marginBottom: '4px' }}>
+                    {stats.total}
+                  </div>
+                  <div style={{ color: '#6b7280', fontSize: '14px' }}>Total Testimonials</div>
+                </div>
+                
+                <div style={{ background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
+                  <div style={{ fontSize: '24px', fontWeight: '700', color: '#059669', marginBottom: '4px' }}>
+                    {stats.approved}
+                  </div>
+                  <div style={{ color: '#6b7280', fontSize: '14px' }}>Approved</div>
+                </div>
+                
+                <div style={{ background: '#f8fafc', padding: '24px', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
+                  <div style={{ fontSize: '24px', fontWeight: '700', color: '#dc2626', marginBottom: '4px' }}>
+                    {stats.pending}
+                  </div>
+                  <div style={{ color: '#6b7280', fontSize: '14px' }}>Pending Review</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'testimonials' && (
+            <div>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '24px'
+              }}>
+                <h3 style={{ fontSize: '20px', fontWeight: '600', color: '#1f2937', margin: 0 }}>
+                  Manage Testimonials
+                </h3>
+                
+                {/* Filter Buttons */}
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  {(['all', 'approved', 'pending'] as const).map((filterType) => (
+                    <button
+                      key={filterType}
+                      onClick={() => setFilter(filterType)}
+                      style={{
+                        padding: '8px 16px',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontSize: '14px',
+                        fontWeight: '500',
+                        cursor: 'pointer',
+                        background: filter === filterType ? '#3b82f6' : '#e5e7eb',
+                        color: filter === filterType ? 'white' : '#374151',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Testimonials List */}
+              <div style={{ display: 'grid', gap: '16px' }}>
+                {filteredTestimonials.length === 0 ? (
+                  <div style={{
+                    textAlign: 'center',
+                    padding: '60px 20px',
+                    color: '#6b7280'
+                  }}>
+                    <div style={{ fontSize: '48px', marginBottom: '16px' }}>📝</div>
+                    <h3 style={{ fontSize: '18px', marginBottom: '8px' }}>
+                      {filter === 'all' ? 'No testimonials yet' : `No ${filter} testimonials`}
+                    </h3>
+                    <p style={{ fontSize: '14px' }}>
+                      Share your collection link to start gathering testimonials!
+                    </p>
+                  </div>
+                ) : (
+                  filteredTestimonials.map((testimonial) => (
+                    <TestimonialCard
+                      key={testimonial.id}
+                      testimonial={testimonial}
+                      onApprove={() => approveTestimonial(testimonial.id)}
+                      onReject={() => rejectTestimonial(testimonial.id)}
+                    />
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'analytics' && user && (
+            <AnalyticsDashboard user={user} />
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Testimonial Card Component
+function TestimonialCard({ 
+  testimonial, 
+  onApprove, 
+  onReject 
+}: { 
+  testimonial: Testimonial
+  onApprove: () => void
+  onReject: () => void 
+}) {
+  return (
+    <div style={{
+      background: testimonial.approved ? '#f0fdf4' : '#fef3c7',
+      border: `1px solid ${testimonial.approved ? '#bbf7d0' : '#fde047'}`,
+      padding: '20px',
+      borderRadius: '12px'
+    }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: '16px'
+      }}>
+        <div>
+          <h4 style={{
+            fontSize: '18px',
+            fontWeight: '600',
+            color: '#1f2937',
+            marginBottom: '4px'
+          }}>
+            {testimonial.customer_name}
+          </h4>
+          <p style={{
+            color: '#6b7280',
+            fontSize: '14px',
+            marginBottom: '8px'
+          }}>
+            {testimonial.customer_email}
+          </p>
+          <div style={{
+            color: '#fbbf24',
+            fontSize: '16px'
+          }}>
+            {'⭐'.repeat(testimonial.rating)}
+          </div>
+        </div>
+        
+        <div style={{
+          display: 'flex',
+          gap: '8px',
+          alignItems: 'center'
+        }}>
+          <span style={{
+            padding: '4px 8px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            fontWeight: '500',
+            background: testimonial.approved ? '#10b981' : '#f59e0b',
+            color: 'white'
+          }}>
+            {testimonial.approved ? 'Approved' : 'Pending'}
+          </span>
+          
+          {!testimonial.approved && (
+            <>
+              <button
+                onClick={onApprove}
+                style={{
+                  background: '#10b981',
+                  color: 'white',
+                  border: 'none',
+                  padding: '6px 12px',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                  fontWeight: '500',
+                  cursor: 'pointer'
+                }}
+              >
+                ✓ Approve
+              </button>
+              <button
+                onClick={onReject}
+                style={{
+                  background: '#dc2626',
+                  color: 'white',
+                  border: 'none',
+                  padding: '6px 12px',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                  fontWeight: '500',
+                  cursor: 'pointer'
+                }}
+              >
+                ✗ Reject
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+      
+      <p style={{
+        color: '#374151',
+        lineHeight: '1.6',
+        marginBottom: '12px',
+        fontStyle: 'italic'
+      }}>
+        "{testimonial.message}"
+      </p>
+      
+      <div style={{
+        fontSize: '12px',
+        color: '#9ca3af'
+      }}>
+        Submitted: {new Date(testimonial.created_at).toLocaleDateString()} at {new Date(testimonial.created_at).toLocaleTimeString()}
       </div>
     </div>
   )

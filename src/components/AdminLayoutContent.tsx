@@ -70,6 +70,15 @@ export default function AdminLayoutContent({ children }: AdminLayoutContentProps
               }}>
                 📊 Dashboard
               </a>
+              <a href="/admin/analytics" style={{
+  color: '#6b7280',
+  textDecoration: 'none',
+  fontSize: '14px',
+  fontWeight: '500',
+  transition: 'color 0.2s'
+}}>
+  📊 Analytics
+</a>
             </div>
           </div>
 
