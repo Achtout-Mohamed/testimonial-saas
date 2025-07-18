@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { createSupabaseComponentClient } from '@/lib/supabase'
 import { User } from '@supabase/supabase-js'
 import { useRouter } from 'next/navigation'
-import { usePageTracking } from '@/lib/analytics'
+import { usePageTracking, trackEvent } from '@/lib/analytics'
 import AnalyticsDashboard from './AnalyticsDashboard'
 
 interface Testimonial {
@@ -37,6 +37,8 @@ export default function DashboardContent() {
       if (user) {
         loadTestimonials(user.id)
         getTestimonialCount(user.id)
+        // Track dashboard view
+        trackEvent.dashboardViewed()
       }
     }
     getUser()
@@ -84,7 +86,10 @@ export default function DashboardContent() {
       if (response.ok) {
         loadTestimonials(user!.id)
         
-        // Track approval action
+        // Track approval action in Vercel Analytics
+        trackEvent.testimonialApproved(id)
+        
+        // Track approval action in internal analytics
         await fetch('/api/analytics/events', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -114,7 +119,10 @@ export default function DashboardContent() {
       if (response.ok) {
         loadTestimonials(user!.id)
         
-        // Track rejection action
+        // Track rejection action in Vercel Analytics
+        trackEvent.testimonialRejected(id)
+        
+        // Track rejection action in internal analytics
         await fetch('/api/analytics/events', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -136,6 +144,12 @@ export default function DashboardContent() {
   const handleSignOut = async () => {
     await supabase.auth.signOut()
     router.push('/auth/login')
+  }
+
+  const handleTabChange = (tab: 'overview' | 'testimonials' | 'analytics') => {
+    setActiveTab(tab)
+    // Track tab changes
+    trackEvent.dashboardViewed()
   }
 
   const filteredTestimonials = testimonials.filter(t => {
@@ -200,7 +214,10 @@ export default function DashboardContent() {
           </div>
           <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <button
-              onClick={() => router.push('/dashboard/widget')}
+              onClick={() => {
+                trackEvent.widgetGenerated('dashboard_click', testimonials.length)
+                router.push('/dashboard/widget')
+              }}
               style={{
                 background: '#e5e7eb',
                 color: '#374151',
@@ -253,7 +270,7 @@ export default function DashboardContent() {
             ].map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => handleTabChange(tab.id as any)}
                 style={{
                   background: 'none',
                   border: 'none',
@@ -294,9 +311,52 @@ export default function DashboardContent() {
                   border: '1px solid #e5e7eb',
                   fontFamily: 'monospace',
                   fontSize: '14px',
-                  color: '#374151'
+                  color: '#374151',
+                  wordBreak: 'break-all'
                 }}>
                   {`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/collect/${user?.id}`}
+                </div>
+                <div style={{
+                  display: 'flex',
+                  gap: '8px',
+                  marginTop: '8px'
+                }}>
+                  <button
+                    onClick={() => {
+                      const link = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/collect/${user?.id}`
+                      navigator.clipboard.writeText(link)
+                      alert('Collection link copied to clipboard!')
+                    }}
+                    style={{
+                      background: '#3b82f6',
+                      color: 'white',
+                      border: 'none',
+                      padding: '6px 12px',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      fontWeight: '500',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    📋 Copy Link
+                  </button>
+                  <a
+                    href={`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/collect/${user?.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      background: '#10b981',
+                      color: 'white',
+                      padding: '6px 12px',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      fontWeight: '500',
+                      textDecoration: 'none',
+                      display: 'inline-block'
+                    }}
+                  >
+                    🔗 Test Link
+                  </a>
                 </div>
                 <p style={{ color: '#6b7280', fontSize: '12px', marginTop: '8px' }}>
                   Share this link with your customers to collect testimonials
@@ -369,6 +429,71 @@ export default function DashboardContent() {
                     {stats.pending}
                   </div>
                   <div style={{ color: '#6b7280', fontSize: '14px' }}>Pending Review</div>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div style={{ marginTop: '30px' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1f2937', marginBottom: '16px' }}>
+                  🚀 Quick Actions
+                </h3>
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                  <button
+                    onClick={() => {
+                      trackEvent.widgetGenerated('overview_click', stats.approved)
+                      router.push('/dashboard/widget')
+                    }}
+                    style={{
+                      background: '#3b82f6',
+                      color: 'white',
+                      border: 'none',
+                      padding: '12px 20px',
+                      borderRadius: '8px',
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}
+                  >
+                    🎨 Generate Widget
+                  </button>
+                  <a
+                    href="/contact"
+                    style={{
+                      background: '#10b981',
+                      color: 'white',
+                      padding: '12px 20px',
+                      borderRadius: '8px',
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}
+                  >
+                    💬 Upgrade Plan
+                  </a>
+                  <button
+                    onClick={() => handleTabChange('testimonials')}
+                    style={{
+                      background: '#f59e0b',
+                      color: 'white',
+                      border: 'none',
+                      padding: '12px 20px',
+                      borderRadius: '8px',
+                      fontSize: '14px',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}
+                  >
+                    📝 Manage Testimonials
+                  </button>
                 </div>
               </div>
             </div>

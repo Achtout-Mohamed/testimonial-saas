@@ -1,4 +1,81 @@
 // src/lib/analytics.ts
+import { track } from '@vercel/analytics'
+
+// Track important user actions for Vercel Analytics
+export const trackEvent = {
+  // User signup tracking
+  userSignup: (method: 'email' | 'google') => {
+    track('User Signup', { method })
+  },
+
+  // Testimonial submission tracking
+  testimonialSubmitted: (rating: number) => {
+    track('Testimonial Submitted', { rating })
+  },
+
+  // Widget generation tracking
+  widgetGenerated: (theme: string, testimonialCount: number) => {
+    track('Widget Generated', { theme, testimonialCount })
+  },
+
+  // Contact form submission
+  contactFormSubmitted: (subject: string) => {
+    track('Contact Form Submitted', { subject })
+  },
+
+  // Contact form viewed - ADD THIS MISSING FUNCTION
+  contactFormViewed: () => {
+    track('Contact Form Viewed')
+  },
+
+  // Admin login tracking
+  adminLogin: () => {
+    track('Admin Login')
+  },
+
+  // Page view tracking
+  pricingViewed: () => {
+    track('Pricing Page Viewed')
+  },
+
+  featuresViewed: () => {
+    track('Features Page Viewed')
+  },
+
+  dashboardViewed: () => {
+    track('Dashboard Viewed')
+  },
+
+  aboutViewed: () => {
+    track('About Page Viewed')
+  },
+
+  // Collection form tracking
+  collectionFormViewed: (userId: string) => {
+    track('Collection Form Viewed', { userId })
+  },
+
+  // Testimonial management
+  testimonialApproved: (testimonialId: string) => {
+    track('Testimonial Approved', { testimonialId })
+  },
+
+  testimonialRejected: (testimonialId: string) => {
+    track('Testimonial Rejected', { testimonialId })
+  },
+
+  // Widget actions
+  widgetCodeCopied: () => {
+    track('Widget Code Copied')
+  },
+
+  // Admin actions
+  contactMessageViewed: () => {
+    track('Contact Message Viewed')
+  }
+}
+
+// Your existing analytics code for internal tracking
 export interface AnalyticsEvent {
   userId: string
   eventType: string

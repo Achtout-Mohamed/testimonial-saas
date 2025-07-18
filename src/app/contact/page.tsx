@@ -1,7 +1,8 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import { trackEvent } from '@/lib/analytics'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -13,6 +14,11 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
+
+  // Track page view
+  useEffect(() => {
+    trackEvent.contactFormViewed()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -31,6 +37,8 @@ export default function ContactPage() {
       const data = await response.json()
 
       if (response.ok) {
+        // Track successful contact form submission
+        trackEvent.contactFormSubmitted(formData.subject)
         setSubmitted(true)
         setFormData({ name: '', email: '', subject: '', message: '' })
       } else {
@@ -350,7 +358,8 @@ export default function ContactPage() {
                           borderRadius: '8px',
                           fontSize: '16px',
                           transition: 'border-color 0.2s',
-                          outline: 'none'
+                          outline: 'none',
+                          boxSizing: 'border-box'
                         }}
                         placeholder="Your name"
                       />
@@ -379,7 +388,8 @@ export default function ContactPage() {
                           borderRadius: '8px',
                           fontSize: '16px',
                           transition: 'border-color 0.2s',
-                          outline: 'none'
+                          outline: 'none',
+                          boxSizing: 'border-box'
                         }}
                         placeholder="your@email.com"
                       />
@@ -401,81 +411,82 @@ export default function ContactPage() {
                         onChange={handleChange}
                         required
                         style={{
-                          width: '100%',
-                          padding: '12px 16px',
-                          border: '2px solid #e5e7eb',
-                          borderRadius: '8px',
-                          fontSize: '16px',
-                          transition: 'border-color 0.2s',
-                          outline: 'none'
-                        }}
-                      >
-                        <option value="">Select a subject</option>
-                        <option value="upgrade">Upgrade My Plan</option>
-                        <option value="support">Technical Support</option>
-                        <option value="question">General Question</option>
-                        <option value="feedback">Feedback</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
+                          width: '100%',padding: '12px 16px',
+                         border: '2px solid #e5e7eb',
+                         borderRadius: '8px',
+                         fontSize: '16px',
+                         transition: 'border-color 0.2s',
+                         outline: 'none',
+                         boxSizing: 'border-box'
+                       }}
+                     >
+                       <option value="">Select a subject</option>
+                       <option value="upgrade">Upgrade My Plan</option>
+                       <option value="support">Technical Support</option>
+                       <option value="question">General Question</option>
+                       <option value="feedback">Feedback</option>
+                       <option value="other">Other</option>
+                     </select>
+                   </div>
 
-                    <div>
-                      <label style={{
-                        display: 'block',
-                        fontSize: '14px',
-                        fontWeight: '500',
-                        color: '#374151',
-                        marginBottom: '8px'
-                      }}>
-                        Message *
-                      </label>
-                      <textarea
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        required
-                        rows={5}
-                        style={{
-                          width: '100%',
-                          padding: '12px 16px',
-                          border: '2px solid #e5e7eb',
-                          borderRadius: '8px',
-                          fontSize: '16px',
-                          transition: 'border-color 0.2s',
-                          outline: 'none',
-                          resize: 'vertical'
-                        }}
-                        placeholder="Tell us how we can help you..."
-                      />
-                    </div>
+                   <div>
+                     <label style={{
+                       display: 'block',
+                       fontSize: '14px',
+                       fontWeight: '500',
+                       color: '#374151',
+                       marginBottom: '8px'
+                     }}>
+                       Message *
+                     </label>
+                     <textarea
+                       name="message"
+                       value={formData.message}
+                       onChange={handleChange}
+                       required
+                       rows={5}
+                       style={{
+                         width: '100%',
+                         padding: '12px 16px',
+                         border: '2px solid #e5e7eb',
+                         borderRadius: '8px',
+                         fontSize: '16px',
+                         transition: 'border-color 0.2s',
+                         outline: 'none',
+                         resize: 'vertical',
+                         boxSizing: 'border-box'
+                       }}
+                       placeholder="Tell us how we can help you..."
+                     />
+                   </div>
 
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      style={{
-                        background: '#3b82f6',
-                        color: 'white',
-                        padding: '16px 24px',
-                        borderRadius: '8px',
-                        border: 'none',
-                        fontSize: '16px',
-                        fontWeight: '600',
-                        cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                        opacity: isSubmitting ? 0.7 : 1,
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      {isSubmitting ? 'Sending...' : 'Send Message'}
-                    </button>
-                  </div>
-                </form>
-              )}
-            </div>
-          </div>
-        </section>
-      </main>
+                   <button
+                     type="submit"
+                     disabled={isSubmitting}
+                     style={{
+                       background: '#3b82f6',
+                       color: 'white',
+                       padding: '16px 24px',
+                       borderRadius: '8px',
+                       border: 'none',
+                       fontSize: '16px',
+                       fontWeight: '600',
+                       cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                       opacity: isSubmitting ? 0.7 : 1,
+                       transition: 'all 0.2s'
+                     }}
+                   >
+                     {isSubmitting ? 'Sending...' : 'Send Message'}
+                   </button>
+                 </div>
+               </form>
+             )}
+           </div>
+         </div>
+       </section>
+     </main>
 
-      <Footer />
-    </div>
-  )
+     <Footer />
+   </div>
+ )
 }

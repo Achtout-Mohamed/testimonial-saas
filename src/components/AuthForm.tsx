@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { createSupabaseComponentClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import { trackEvent } from '@/lib/analytics'
 
 interface AuthFormProps {
   mode: 'login' | 'signup'
@@ -37,6 +38,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
         if (error) {
           setMessage(error.message)
         } else {
+          // Track successful signup
+          trackEvent.userSignup('email')
           setMessage('Please check your email to confirm your account!')
         }
       } else {
@@ -114,7 +117,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
                   border: '2px solid #e5e7eb',
                   borderRadius: '8px',
                   fontSize: '16px',
-                  transition: 'border-color 0.2s'
+                  transition: 'border-color 0.2s',
+                  boxSizing: 'border-box'
                 }}
                 placeholder="Enter your full name"
               />
@@ -141,7 +145,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 border: '2px solid #e5e7eb',
                 borderRadius: '8px',
                 fontSize: '16px',
-                transition: 'border-color 0.2s'
+                transition: 'border-color 0.2s',
+                boxSizing: 'border-box'
               }}
               placeholder="Enter your email"
             />
@@ -167,7 +172,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 border: '2px solid #e5e7eb',
                 borderRadius: '8px',
                 fontSize: '16px',
-                transition: 'border-color 0.2s'
+                transition: 'border-color 0.2s',
+                boxSizing: 'border-box'
               }}
               placeholder="Enter your password"
               minLength={6}

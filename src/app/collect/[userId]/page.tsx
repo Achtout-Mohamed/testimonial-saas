@@ -1,7 +1,7 @@
-// src/app/collect/[userId]/page.tsx - Enhanced with Analytics
 'use client'
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
+import { trackEvent } from '@/lib/analytics'
 
 export default function CollectTestimonial() {
   const params = useParams()
@@ -21,6 +21,8 @@ export default function CollectTestimonial() {
   useEffect(() => {
     // Track form view when page loads
     trackAnalytics('form_view', userId)
+    // Track Vercel analytics
+    trackEvent.collectionFormViewed(userId)
   }, [userId])
 
   const trackAnalytics = async (eventType: string, targetUserId: string, additionalData?: any) => {
@@ -93,6 +95,9 @@ export default function CollectTestimonial() {
           rating: formData.rating,
           messageLength: formData.message.length
         })
+        
+        // Track Vercel analytics
+        trackEvent.testimonialSubmitted(formData.rating)
         
         setIsSubmitted(true)
       } else {

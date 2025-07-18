@@ -1,5 +1,8 @@
+'use client'
+import { useEffect } from 'react'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import { trackEvent } from '@/lib/analytics'
 
 export default function PricingPage() {
   const plans = [

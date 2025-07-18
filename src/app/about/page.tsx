@@ -2,6 +2,8 @@
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import ProfileImage from '@/components/ProfileImage'
+import { useEffect } from 'react'
+import { trackEvent } from '@/lib/analytics'
 
 export default function AboutPage() {
   return (
