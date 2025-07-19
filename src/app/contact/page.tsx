@@ -156,7 +156,7 @@ export default function ContactPage() {
                     alignItems: 'center',
                     justifyContent: 'center'
                   }}>
-                    <EmailIcon size={20} />
+                    <Icon name="email" size={20} color="white" />
                   </div>
                   <div>
                     <h3 style={{
@@ -197,7 +197,7 @@ export default function ContactPage() {
                     alignItems: 'center',
                     justifyContent: 'center'
                   }}>
-                    <WhatsAppIcon size={20} />
+                    <Icon name="whatsapp" size={20} color="white" />
                   </div>
                   <div>
                     <h3 style={{
