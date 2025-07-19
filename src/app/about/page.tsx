@@ -4,6 +4,7 @@ import Footer from '@/components/Footer'
 import ProfileImage from '@/components/ProfileImage'
 import { useEffect } from 'react'
 import { trackEvent } from '@/lib/analytics'
+import { Icon, WhatsAppIcon, GitHubIcon, EmailIcon } from '@/components/Icon'
 
 export default function AboutPage() {
   return (
@@ -23,8 +24,13 @@ export default function AboutPage() {
               fontSize: '48px',
               fontWeight: '700',
               marginBottom: '24px',
-              lineHeight: '1.2'
+              lineHeight: '1.2',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '16px'
             }}>
+              <Icon name="about" size={48} color="white" />
               About TestimonialPro
             </h1>
             <p style={{
@@ -56,8 +62,13 @@ export default function AboutPage() {
               fontWeight: '700',
               color: '#1f2937',
               marginBottom: '24px',
-              textAlign: 'center'
+              textAlign: 'center',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px'
             }}>
+              <Icon name="lightbulb" size={32} color="#3b82f6" />
               Why We Built This
             </h2>
             
@@ -74,7 +85,7 @@ export default function AboutPage() {
               </p>
               
               <p style={{ marginBottom: '24px' }}>
-                I tried existing tools, but they were either too complicated, too expensive, or didn&apos;t 
+                I tried existing tools, but they were either too complicated, too expensive, or didn't 
                 work well for small businesses. I needed something simple that just worked.
               </p>
               
@@ -96,10 +107,15 @@ export default function AboutPage() {
                 fontSize: '16px',
                 color: '#1e40af',
                 fontStyle: 'italic',
-                margin: 0
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
               }}>
-                &quot;TestimonialPro has helped over 500+ businesses collect more than 10,000 testimonials. 
-                We&apos;re just getting started!&quot;
+                <Icon name="trending" size={20} color="#1e40af" />
+                "TestimonialPro has helped over 500+ businesses collect more than 10,000 testimonials. 
+                We're just getting started!"
               </p>
             </div>
           </div>
@@ -116,8 +132,13 @@ export default function AboutPage() {
             fontWeight: '700',
             textAlign: 'center',
             color: '#1f2937',
-            marginBottom: '48px'
+            marginBottom: '48px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px'
           }}>
+            <Icon name="award" size={32} color="#3b82f6" />
             Our Values
           </h2>
           
@@ -128,22 +149,22 @@ export default function AboutPage() {
           }}>
             {[
               {
-                icon: '🎯',
+                iconName: 'target' as const,
                 title: 'Simple & Focused',
                 description: 'We believe software should be simple. No bloated features, just what you need to collect testimonials effectively.'
               },
               {
-                icon: '💚',
+                iconName: 'heart' as const,
                 title: 'Small Business First',
                 description: 'Built for entrepreneurs and small businesses who need results without complexity or huge budgets.'
               },
               {
-                icon: '🚀',
+                iconName: 'fast' as const,
                 title: 'Fast & Reliable',
                 description: 'Your testimonials are important. We ensure our platform is fast, reliable, and always available.'
               },
               {
-                icon: '🤝',
+                iconName: 'support' as const,
                 title: 'Personal Support',
                 description: 'Real people, real help. We respond to every email personally and genuinely care about your success.'
               }
@@ -156,10 +177,18 @@ export default function AboutPage() {
                 textAlign: 'center'
               }}>
                 <div style={{
-                  fontSize: '48px',
-                  marginBottom: '20px'
+                  marginBottom: '20px',
+                  display: 'flex',
+                  justifyContent: 'center'
                 }}>
-                  {value.icon}
+                  <div style={{
+                    background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                    padding: '16px',
+                    borderRadius: '12px',
+                    display: 'inline-flex'
+                  }}>
+                    <Icon name={value.iconName} size={32} color="white" />
+                  </div>
                 </div>
                 <h3 style={{
                   fontSize: '24px',
@@ -192,8 +221,13 @@ export default function AboutPage() {
             fontWeight: '700',
             textAlign: 'center',
             color: '#1f2937',
-            marginBottom: '48px'
+            marginBottom: '48px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px'
           }}>
+            <Icon name="user" size={32} color="#3b82f6" />
             Meet the Founder
           </h2>
           
@@ -224,8 +258,13 @@ export default function AboutPage() {
               color: '#3b82f6',
               fontSize: '18px',
               fontWeight: '600',
-              marginBottom: '24px'
+              marginBottom: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px'
             }}>
+              <Icon name="briefcase" size={18} />
               Founder & Developer
             </p>
             
@@ -242,10 +281,10 @@ export default function AboutPage() {
                 fontSize: '16px',
                 margin: 0
               }}>
-                Hey! I&apos;m Mohamed, a passionate developer from Morocco who loves building tools that help small 
+                Hey! I'm Mohamed, a passionate developer from Morocco who loves building tools that help small 
                 businesses succeed. With expertise in modern web technologies and a deep understanding of 
                 business needs, I created TestimonialPro to solve the real problem of collecting authentic 
-                customer feedback. When I&apos;m not coding, you&apos;ll find me helping other entrepreneurs 
+                customer feedback. When I'm not coding, you'll find me helping other entrepreneurs 
                 or exploring new technologies that can make business operations simpler and more effective.
               </p>
             </div>
@@ -271,7 +310,8 @@ export default function AboutPage() {
                   gap: '8px'
                 }}
               >
-                📧 Email Me
+                <EmailIcon size={16} />
+                Email Me
               </a>
               <a 
                 href="https://wa.me/212611110589"
@@ -288,7 +328,8 @@ export default function AboutPage() {
                   gap: '8px'
                 }}
               >
-                📱 WhatsApp
+                <WhatsAppIcon size={16} />
+                WhatsApp
               </a>
               <a 
                 href="https://github.com/Achtout-Mohamed"
@@ -305,7 +346,8 @@ export default function AboutPage() {
                   gap: '8px'
                 }}
               >
-                💻 GitHub
+                <GitHubIcon size={16} />
+                GitHub
               </a>
             </div>
           </div>
@@ -322,8 +364,13 @@ export default function AboutPage() {
             <h2 style={{
               fontSize: '36px',
               fontWeight: '700',
-              marginBottom: '24px'
+              marginBottom: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px'
             }}>
+              <Icon name="rocket" size={32} color="white" />
               Ready to Start Your Journey?
             </h2>
             <p style={{
@@ -350,10 +397,13 @@ export default function AboutPage() {
                   textDecoration: 'none',
                   fontSize: '18px',
                   fontWeight: '600',
-                  display: 'inline-block'
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}
               >
-                🚀 Start Free Today
+                <Icon name="rocket" size={18} color="white" />
+                Start Free Today
               </a>
               <a
                 href="/contact"
@@ -366,10 +416,13 @@ export default function AboutPage() {
                   fontSize: '18px',
                   fontWeight: '600',
                   border: '2px solid rgba(255,255,255,0.3)',
-                  display: 'inline-block'
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}
               >
-                💬 Get in Touch
+                <Icon name="contact" size={18} color="white" />
+                Get in Touch
               </a>
             </div>
           </div>

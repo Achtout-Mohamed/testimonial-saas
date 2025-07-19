@@ -3,11 +3,12 @@ import { useEffect } from 'react'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import { trackEvent } from '@/lib/analytics'
+import { Icon } from '@/components/Icon'
 
 export default function FeaturesPage() {
   const features = [
     {
-      icon: '🎯',
+      iconName: 'target' as const,
       title: 'Simple Collection',
       description: 'Send customers a single link to collect testimonials instantly. No complicated forms or processes.',
       details: [
@@ -18,7 +19,7 @@ export default function FeaturesPage() {
       ]
     },
     {
-      icon: '⚡',
+      iconName: 'settings' as const,
       title: 'Easy Management',
       description: 'Approve, reject, and organize testimonials from your dashboard. Full control over what gets displayed.',
       details: [
@@ -29,7 +30,7 @@ export default function FeaturesPage() {
       ]
     },
     {
-      icon: '🎨',
+      iconName: 'widget' as const,
       title: 'Beautiful Widgets',
       description: 'Generate embed codes to display testimonials on your website. Matches your brand perfectly.',
       details: [
@@ -40,7 +41,7 @@ export default function FeaturesPage() {
       ]
     },
     {
-      icon: '📊',
+      iconName: 'analytics' as const,
       title: 'Smart Analytics',
       description: 'Track testimonial collection and see which ones perform best. Make data-driven decisions.',
       details: [
@@ -51,7 +52,7 @@ export default function FeaturesPage() {
       ]
     },
     {
-      icon: '🔒',
+      iconName: 'secure' as const,
       title: 'Secure & Reliable',
       description: 'Your testimonials are safe with enterprise-grade security and 99.9% uptime guarantee.',
       details: [
@@ -62,7 +63,7 @@ export default function FeaturesPage() {
       ]
     },
     {
-      icon: '🚀',
+      iconName: 'fast' as const,
       title: 'Fast Setup',
       description: 'Get started in minutes, not hours. No technical skills required to collect testimonials.',
       details: [
@@ -91,9 +92,14 @@ export default function FeaturesPage() {
               fontSize: '48px',
               fontWeight: '700',
               marginBottom: '24px',
-              lineHeight: '1.2'
+              lineHeight: '1.2',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '16px'
             }}>
-              ✨ Everything You Need to Collect Testimonials
+              <Icon name="features" size={48} color="white" />
+              Everything You Need to Collect Testimonials
             </h1>
             <p style={{
               fontSize: '20px',
@@ -114,11 +120,14 @@ export default function FeaturesPage() {
                 textDecoration: 'none',
                 fontSize: '18px',
                 fontWeight: '600',
-                display: 'inline-block',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
               }}
             >
-              🚀 Try It Free
+              <Icon name="rocket" size={18} color="#667eea" />
+              Try It Free
             </a>
           </div>
         </section>
@@ -143,11 +152,18 @@ export default function FeaturesPage() {
                 transition: 'transform 0.2s, box-shadow 0.2s'
               }}>
                 <div style={{
-                  fontSize: '48px',
                   marginBottom: '20px',
-                  textAlign: 'center'
+                  display: 'flex',
+                  justifyContent: 'center'
                 }}>
-                  {feature.icon}
+                  <div style={{
+                    background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                    padding: '16px',
+                    borderRadius: '12px',
+                    display: 'inline-flex'
+                  }}>
+                    <Icon name={feature.iconName} size={32} color="white" />
+                  </div>
                 </div>
                 <h3 style={{
                   fontSize: '24px',
@@ -179,11 +195,10 @@ export default function FeaturesPage() {
                       color: '#374151'
                     }}>
                       <span style={{
-                        color: '#10b981',
                         marginRight: '12px',
-                        fontSize: '16px'
+                        display: 'flex'
                       }}>
-                        ✓
+                        <Icon name="success" size={16} color="#10b981" />
                       </span>
                       {detail}
                     </li>
@@ -205,8 +220,13 @@ export default function FeaturesPage() {
             <h2 style={{
               fontSize: '36px',
               fontWeight: '700',
-              marginBottom: '24px'
+              marginBottom: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px'
             }}>
+              <Icon name="rocket" size={32} color="white" />
               Ready to Start Collecting Testimonials?
             </h2>
             <p style={{
@@ -233,10 +253,13 @@ export default function FeaturesPage() {
                   textDecoration: 'none',
                   fontSize: '18px',
                   fontWeight: '600',
-                  display: 'inline-block'
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}
               >
-                🚀 Start Free Trial
+                <Icon name="rocket" size={18} color="white" />
+                Start Free Trial
               </a>
               <a
                 href="/contact"
@@ -249,10 +272,13 @@ export default function FeaturesPage() {
                   fontSize: '18px',
                   fontWeight: '600',
                   border: '2px solid rgba(255,255,255,0.3)',
-                  display: 'inline-block'
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}
               >
-                💬 Contact Sales
+                <Icon name="contact" size={18} color="white" />
+                Contact Sales
               </a>
             </div>
           </div>

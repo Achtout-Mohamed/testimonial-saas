@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { Icon } from '@/components/Icon'
 
 export default function AdminLoginPage() {
   const [formData, setFormData] = useState({
@@ -62,10 +63,9 @@ export default function AdminLoginPage() {
       }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <div style={{
-            fontSize: '48px',
             marginBottom: '16px'
           }}>
-            🔐
+            <Icon name="lock" size={48} color="#dc2626" />
           </div>
           <h1 style={{
             fontSize: '24px',
@@ -92,8 +92,13 @@ export default function AdminLoginPage() {
             borderRadius: '8px',
             marginBottom: '24px',
             fontSize: '14px',
-            textAlign: 'center'
+            textAlign: 'center',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            justifyContent: 'center'
           }}>
+            <Icon name="error" size={16} />
             {error}
           </div>
         )}
@@ -105,12 +110,15 @@ export default function AdminLoginPage() {
           }}>
             <div>
               <label style={{
-                display: 'block',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
                 fontSize: '14px',
                 fontWeight: '500',
                 color: '#374151',
                 marginBottom: '8px'
               }}>
+                <Icon name="email" size={14} />
                 Email
               </label>
               <input
@@ -135,12 +143,15 @@ export default function AdminLoginPage() {
 
             <div>
               <label style={{
-                display: 'block',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
                 fontSize: '14px',
                 fontWeight: '500',
                 color: '#374151',
                 marginBottom: '8px'
               }}>
+                <Icon name="lock" size={14} />
                 Password
               </label>
               <input
@@ -176,10 +187,24 @@ export default function AdminLoginPage() {
                 fontSize: '16px',
                 fontWeight: '600',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
-                opacity: isLoading ? 0.7 : 1
+                opacity: isLoading ? 0.7 : 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
               }}
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? (
+                <>
+                  <Icon name="loading" size={16} />
+                  Signing in...
+                </>
+              ) : (
+                <>
+                  <Icon name="login" size={16} />
+                  Sign In
+                </>
+              )}
             </button>
           </div>
         </form>
@@ -193,10 +218,15 @@ export default function AdminLoginPage() {
             style={{
               color: '#6b7280',
               textDecoration: 'none',
-              fontSize: '14px'
+              fontSize: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px'
             }}
           >
-            ← Back to Website
+            <Icon name="back" size={14} />
+            Back to Website
           </a>
         </div>
       </div>

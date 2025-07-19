@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { createSupabaseComponentClient } from '@/lib/supabase'
 import { User } from '@supabase/supabase-js'
+import { Icon } from '@/components/Icon'
 
 export default function Navigation() {
   const [user, setUser] = useState<User | null>(null)
@@ -44,7 +45,8 @@ export default function Navigation() {
           alignItems: 'center',
           gap: '8px'
         }}>
-          🎉 TestimonialPro
+          <Icon name="logo" size={28} color="#3b82f6" />
+          TestimonialPro
         </a>
 
         {/* Desktop Navigation */}
@@ -62,8 +64,12 @@ export default function Navigation() {
               textDecoration: 'none',
               fontSize: '16px',
               fontWeight: '500',
-              transition: 'color 0.2s'
+              transition: 'color 0.2s',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
             }}>
+              <Icon name="features" size={16} />
               Features
             </a>
             <a href="/pricing" style={{
@@ -71,8 +77,12 @@ export default function Navigation() {
               textDecoration: 'none',
               fontSize: '16px',
               fontWeight: '500',
-              transition: 'color 0.2s'
+              transition: 'color 0.2s',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
             }}>
+              <Icon name="pricing" size={16} />
               Pricing
             </a>
             <a href="/about" style={{
@@ -80,8 +90,12 @@ export default function Navigation() {
               textDecoration: 'none',
               fontSize: '16px',
               fontWeight: '500',
-              transition: 'color 0.2s'
+              transition: 'color 0.2s',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
             }}>
+              <Icon name="about" size={16} />
               About
             </a>
             <a href="/contact" style={{
@@ -89,8 +103,12 @@ export default function Navigation() {
               textDecoration: 'none',
               fontSize: '16px',
               fontWeight: '500',
-              transition: 'color 0.2s'
+              transition: 'color 0.2s',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
             }}>
+              <Icon name="contact" size={16} />
               Contact
             </a>
           </div>
@@ -111,9 +129,13 @@ export default function Navigation() {
                   borderRadius: '6px',
                   textDecoration: 'none',
                   fontSize: '14px',
-                  fontWeight: '500'
+                  fontWeight: '500',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
                 }}
               >
+                <Icon name="dashboard" size={16} />
                 Dashboard
               </a>
             ) : (
@@ -124,9 +146,13 @@ export default function Navigation() {
                     color: '#6b7280',
                     textDecoration: 'none',
                     fontSize: '14px',
-                    fontWeight: '500'
+                    fontWeight: '500',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
                   }}
                 >
+                  <Icon name="login" size={16} />
                   Sign In
                 </a>
                 <a
@@ -138,9 +164,13 @@ export default function Navigation() {
                     borderRadius: '6px',
                     textDecoration: 'none',
                     fontSize: '14px',
-                    fontWeight: '500'
+                    fontWeight: '500',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
                   }}
                 >
+                  <Icon name="rocket" size={16} />
                   Start Free
                 </a>
               </>

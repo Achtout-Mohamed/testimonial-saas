@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import { trackEvent } from '@/lib/analytics'
+import { Icon } from '@/components/Icon'
 
 export default function PricingPage() {
   const plans = [
@@ -20,7 +21,8 @@ export default function PricingPage() {
       ],
       popular: false,
       cta: 'Get Started Free',
-      href: '/auth/signup'
+      href: '/auth/signup',
+      iconName: 'free' as const
     },
     {
       name: 'Professional',
@@ -39,7 +41,8 @@ export default function PricingPage() {
       ],
       popular: true,
       cta: 'Contact Us',
-      href: '/contact'
+      href: '/contact',
+      iconName: 'pro' as const
     },
     {
       name: 'Enterprise',
@@ -58,7 +61,8 @@ export default function PricingPage() {
       ],
       popular: false,
       cta: 'Contact Sales',
-      href: '/contact'
+      href: '/contact',
+      iconName: 'enterprise' as const
     }
   ]
 
@@ -79,9 +83,14 @@ export default function PricingPage() {
               fontSize: '48px',
               fontWeight: '700',
               marginBottom: '24px',
-              lineHeight: '1.2'
+              lineHeight: '1.2',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '16px'
             }}>
-              💰 Simple, Transparent Pricing
+              <Icon name="pricing" size={48} color="white" />
+              Simple, Transparent Pricing
             </h1>
             <p style={{
               fontSize: '20px',
@@ -135,14 +144,21 @@ export default function PricingPage() {
                     fontSize: '12px',
                     fontWeight: '600',
                     textTransform: 'uppercase',
-                    letterSpacing: '0.5px'
+                    letterSpacing: '0.5px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
                   }}>
-                    🔥 Most Popular
+                    <Icon name="trending" size={14} color="white" />
+                    Most Popular
                   </div>
                 )}
 
                 {/* Plan Header */}
                 <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+                  <div style={{ marginBottom: '16px' }}>
+                    <Icon name={plan.iconName} size={48} color="#3b82f6" />
+                  </div>
                   <h3 style={{
                     fontSize: '24px',
                     fontWeight: '700',
@@ -191,11 +207,10 @@ export default function PricingPage() {
                       color: '#374151'
                     }}>
                       <span style={{
-                        color: '#10b981',
                         marginRight: '12px',
-                        fontSize: '16px'
+                        display: 'flex'
                       }}>
-                        ✓
+                        <Icon name="success" size={16} color="#10b981" />
                       </span>
                       {feature}
                     </li>
@@ -214,19 +229,28 @@ export default function PricingPage() {
                       textDecoration: 'none',
                       fontSize: '16px',
                       fontWeight: '600',
-                      display: 'inline-block',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
                       width: '100%',
                       transition: 'background 0.2s'
                     }}
                   >
+                    <Icon name={plan.name === 'Free' ? 'rocket' : 'contact'} size={16} />
                     {plan.cta}
                   </a>
                   {plan.name !== 'Free' && (
                     <p style={{
                       fontSize: '12px',
                       color: '#6b7280',
-                      marginTop: '8px'
+                      marginTop: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '4px'
                     }}>
+                      <Icon name="info" size={12} />
                       Contact us for custom pricing
                     </p>
                   )}
@@ -247,8 +271,13 @@ export default function PricingPage() {
             fontWeight: '700',
             textAlign: 'center',
             color: '#1f2937',
-            marginBottom: '48px'
+            marginBottom: '48px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px'
           }}>
+            <Icon name="help" size={32} color="#3b82f6" />
             Frequently Asked Questions
           </h2>
           
@@ -259,23 +288,28 @@ export default function PricingPage() {
             {[
               {
                 q: 'Can I change plans anytime?',
-                a: 'Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately with prorated billing.'
+                a: 'Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately with prorated billing.',
+                icon: 'settings' as const
               },
               {
                 q: 'What happens to my data if I cancel?',
-                a: 'Your data is safe! You\'ll have 30 days to export your testimonials before your account is permanently deleted.'
+                a: 'Your data is safe! You\'ll have 30 days to export your testimonials before your account is permanently deleted.',
+                icon: 'database' as const
               },
               {
                 q: 'Do you offer refunds?',
-                a: 'Yes! We offer a 30-day money-back guarantee. If you\'re not satisfied, we\'ll refund your payment.'
+                a: 'Yes! We offer a 30-day money-back guarantee. If you\'re not satisfied, we\'ll refund your payment.',
+                icon: 'shield' as const
               },
               {
                 q: 'How does the free plan work?',
-                a: 'The free plan includes 10 testimonials and 1 widget forever. No credit card required, no time limit.'
+                a: 'The free plan includes 10 testimonials and 1 widget forever. No credit card required, no time limit.',
+                icon: 'free' as const
               },
               {
                 q: 'Can I get help setting up?',
-                a: 'Absolutely! We provide email support for all plans and priority support for paid plans. Setup takes just 5 minutes.'
+                a: 'Absolutely! We provide email support for all plans and priority support for paid plans. Setup takes just 5 minutes.',
+                icon: 'support' as const
               }
             ].map((faq, index) => (
               <div key={index} style={{
@@ -288,8 +322,12 @@ export default function PricingPage() {
                   fontSize: '18px',
                   fontWeight: '600',
                   color: '#1f2937',
-                  marginBottom: '12px'
+                  marginBottom: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}>
+                  <Icon name={faq.icon} size={18} color="#3b82f6" />
                   {faq.q}
                 </h3>
                 <p style={{

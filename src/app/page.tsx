@@ -4,6 +4,7 @@ import { createSupabaseComponentClient } from '@/lib/supabase'
 import { User } from '@supabase/supabase-js'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import { Icon } from '@/components/Icon'
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null)
@@ -23,9 +24,21 @@ export default function Home() {
       
       <div className="homepage">
         <div>
-          <h1>🎉 Testimonial SaaS</h1>
-          <p>The easiest way to collect and display customer testimonials</p>
+          <h1 style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '16px',
+            marginBottom: '16px'
+          }}>
+            <Icon name="logo" size={56} color="white" />
+            Testimonial SaaS
+          </h1>
           <p style={{ fontSize: '16px', opacity: '0.9', marginTop: '8px' }}>
+            The easiest way to collect and display customer testimonials
+          </p>
+          <p style={{ fontSize: '16px', opacity: '0.9', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+            <Icon name="rocket" size={16} color="white" />
             Start free - 10 testimonials included!
           </p>
           
@@ -46,10 +59,14 @@ export default function Home() {
                     borderRadius: '8px',
                     textDecoration: 'none',
                     fontWeight: '500',
-                    border: '1px solid rgba(255,255,255,0.3)'
+                    border: '1px solid rgba(255,255,255,0.3)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
                   }}
                 >
-                  📊 Go to Dashboard
+                  <Icon name="dashboard" size={18} color="white" />
+                  Go to Dashboard
                 </a>
                 <a
                   href="/dashboard/widget"
@@ -60,10 +77,14 @@ export default function Home() {
                     borderRadius: '8px',
                     textDecoration: 'none',
                     fontWeight: '500',
-                    border: '1px solid rgba(255,255,255,0.3)'
+                    border: '1px solid rgba(255,255,255,0.3)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
                   }}
                 >
-                  🎨 Widget Generator
+                  <Icon name="widget" size={18} color="white" />
+                  Widget Generator
                 </a>
               </>
             ) : (
@@ -77,10 +98,14 @@ export default function Home() {
                     borderRadius: '8px',
                     textDecoration: 'none',
                     fontWeight: '600',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
                   }}
                 >
-                  🚀 Get Started Free
+                  <Icon name="rocket" size={18} color="#667eea" />
+                  Get Started Free
                 </a>
                 <a
                   href="/auth/login"
@@ -91,19 +116,42 @@ export default function Home() {
                     borderRadius: '8px',
                     textDecoration: 'none',
                     fontWeight: '500',
-                    border: '1px solid rgba(255,255,255,0.3)'
+                    border: '1px solid rgba(255,255,255,0.3)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
                   }}
                 >
-                  👋 Sign In
+                  <Icon name="login" size={18} color="white" />
+                  Sign In
                 </a>
               </>
             )}
           </div>
 
           <div style={{ marginTop: '40px', fontSize: '14px', opacity: '0.8' }}>
-            <p>✨ Free Forever Plan Includes:</p>
-            <p>• 10 testimonials • 1 website widget • Email support</p>
-            <p>• Contact us for unlimited testimonials!</p>
+            <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+              <Icon name="features" size={16} color="white" />
+              Free Forever Plan Includes:
+            </p>
+            <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Icon name="testimonials" size={14} color="white" />
+                10 testimonials
+              </span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Icon name="widget" size={14} color="white" />
+                1 website widget
+              </span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Icon name="support" size={14} color="white" />
+                Email support
+              </span>
+            </p>
+            <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+              <Icon name="contact" size={16} color="white" />
+              Contact us for unlimited testimonials!
+            </p>
           </div>
         </div>
       </div>

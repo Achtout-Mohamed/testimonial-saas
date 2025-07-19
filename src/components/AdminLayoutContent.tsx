@@ -1,5 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
+import { Icon } from '@/components/Icon'
 
 interface AdminLayoutContentProps {
   children: React.ReactNode
@@ -43,9 +44,13 @@ export default function AdminLayoutContent({ children }: AdminLayoutContentProps
             <div style={{
               fontSize: '20px',
               fontWeight: '700',
-              color: '#1f2937'
+              color: '#1f2937',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
             }}>
-              🛠️ Admin Panel
+              <Icon name="admin" size={24} color="#dc2626" />
+              Admin Panel
             </div>
             
             <div style={{
@@ -57,28 +62,40 @@ export default function AdminLayoutContent({ children }: AdminLayoutContentProps
                 textDecoration: 'none',
                 fontSize: '14px',
                 fontWeight: '500',
-                transition: 'color 0.2s'
+                transition: 'color 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
               }}>
-                📧 Contact Messages
+                <Icon name="email" size={16} />
+                Contact Messages
               </a>
               <a href="/dashboard" style={{
                 color: '#6b7280',
                 textDecoration: 'none',
                 fontSize: '14px',
                 fontWeight: '500',
-                transition: 'color 0.2s'
+                transition: 'color 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
               }}>
-                📊 Dashboard
+                <Icon name="dashboard" size={16} />
+                Dashboard
               </a>
               <a href="/admin/analytics" style={{
-  color: '#6b7280',
-  textDecoration: 'none',
-  fontSize: '14px',
-  fontWeight: '500',
-  transition: 'color 0.2s'
-}}>
-  📊 Analytics
-</a>
+                color: '#6b7280',
+                textDecoration: 'none',
+                fontSize: '14px',
+                fontWeight: '500',
+                transition: 'color 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}>
+                <Icon name="analytics" size={16} />
+                Analytics
+              </a>
             </div>
           </div>
 
@@ -93,8 +110,12 @@ export default function AdminLayoutContent({ children }: AdminLayoutContentProps
               fontWeight: '500',
               background: '#d1fae5',
               padding: '4px 8px',
-              borderRadius: '4px'
+              borderRadius: '4px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
             }}>
+              <Icon name="shield" size={12} />
               ADMIN
             </span>
             <button
@@ -108,9 +129,13 @@ export default function AdminLayoutContent({ children }: AdminLayoutContentProps
                 fontSize: '12px',
                 fontWeight: '500',
                 cursor: 'pointer',
-                transition: 'background 0.2s'
+                transition: 'background 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px'
               }}
             >
+              <Icon name="logout" size={12} />
               Sign Out
             </button>
           </div>

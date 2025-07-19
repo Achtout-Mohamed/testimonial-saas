@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import { trackEvent } from '@/lib/analytics'
+import { Icon, WhatsAppIcon, EmailIcon } from '@/components/Icon'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -75,8 +76,13 @@ export default function ContactPage() {
               fontSize: '48px',
               fontWeight: '700',
               marginBottom: '24px',
-              lineHeight: '1.2'
+              lineHeight: '1.2',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '16px'
             }}>
+              <Icon name="contact" size={48} color="white" />
               Get in Touch
             </h1>
             <p style={{
@@ -108,8 +114,12 @@ export default function ContactPage() {
                 fontSize: '32px',
                 fontWeight: '700',
                 color: '#1f2937',
-                marginBottom: '24px'
+                marginBottom: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
               }}>
+                <Icon name="message" size={32} color="#3b82f6" />
                 Let's Talk
               </h2>
               
@@ -144,10 +154,9 @@ export default function ContactPage() {
                     borderRadius: '8px',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '20px'
+                    justifyContent: 'center'
                   }}>
-                    📧
+                    <EmailIcon size={20} />
                   </div>
                   <div>
                     <h3 style={{
@@ -186,10 +195,9 @@ export default function ContactPage() {
                     borderRadius: '8px',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '20px'
+                    justifyContent: 'center'
                   }}>
-                    📱
+                    <WhatsAppIcon size={20} />
                   </div>
                   <div>
                     <h3 style={{
@@ -231,10 +239,9 @@ export default function ContactPage() {
                     borderRadius: '8px',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '20px'
+                    justifyContent: 'center'
                   }}>
-                    ⚡
+                    <Icon name="fast" size={20} color="white" />
                   </div>
                   <div>
                     <h3 style={{
@@ -268,8 +275,12 @@ export default function ContactPage() {
                 fontSize: '24px',
                 fontWeight: '700',
                 color: '#1f2937',
-                marginBottom: '24px'
+                marginBottom: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
               }}>
+                <Icon name="message" size={24} color="#3b82f6" />
                 Send us a Message
               </h2>
 
@@ -279,10 +290,9 @@ export default function ContactPage() {
                   padding: '40px 20px'
                 }}>
                   <div style={{
-                    fontSize: '64px',
                     marginBottom: '24px'
                   }}>
-                    ✅
+                    <Icon name="success" size={64} color="#10b981" />
                   </div>
                   <h3 style={{
                     fontSize: '24px',
@@ -309,9 +319,14 @@ export default function ContactPage() {
                       borderRadius: '6px',
                       fontSize: '14px',
                       fontWeight: '500',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      margin: '0 auto'
                     }}
                   >
+                    <Icon name="edit" size={14} />
                     Send Another Message
                   </button>
                 </div>
@@ -325,8 +340,12 @@ export default function ContactPage() {
                       padding: '12px 16px',
                       borderRadius: '8px',
                       marginBottom: '20px',
-                      fontSize: '14px'
+                      fontSize: '14px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
                     }}>
+                      <Icon name="error" size={16} />
                       {error}
                     </div>
                   )}
@@ -337,12 +356,15 @@ export default function ContactPage() {
                   }}>
                     <div>
                       <label style={{
-                        display: 'block',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
                         fontSize: '14px',
                         fontWeight: '500',
                         color: '#374151',
                         marginBottom: '8px'
                       }}>
+                        <Icon name="user" size={14} />
                         Name *
                       </label>
                       <input
@@ -367,12 +389,15 @@ export default function ContactPage() {
 
                     <div>
                       <label style={{
-                        display: 'block',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
                         fontSize: '14px',
                         fontWeight: '500',
                         color: '#374151',
                         marginBottom: '8px'
                       }}>
+                        <Icon name="email" size={14} />
                         Email *
                       </label>
                       <input
@@ -397,12 +422,15 @@ export default function ContactPage() {
 
                     <div>
                       <label style={{
-                        display: 'block',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
                         fontSize: '14px',
                         fontWeight: '500',
                         color: '#374151',
                         marginBottom: '8px'
                       }}>
+                        <Icon name="tag" size={14} />
                         Subject *
                       </label>
                       <select
@@ -411,82 +439,100 @@ export default function ContactPage() {
                         onChange={handleChange}
                         required
                         style={{
-                          width: '100%',padding: '12px 16px',
-                         border: '2px solid #e5e7eb',
-                         borderRadius: '8px',
-                         fontSize: '16px',
-                         transition: 'border-color 0.2s',
-                         outline: 'none',
-                         boxSizing: 'border-box'
-                       }}
-                     >
-                       <option value="">Select a subject</option>
-                       <option value="upgrade">Upgrade My Plan</option>
-                       <option value="support">Technical Support</option>
-                       <option value="question">General Question</option>
-                       <option value="feedback">Feedback</option>
-                       <option value="other">Other</option>
-                     </select>
-                   </div>
+                          width: '100%',
+                          padding: '12px 16px',
+                          border: '2px solid #e5e7eb',
+                          borderRadius: '8px',
+                          fontSize: '16px',
+                          transition: 'border-color 0.2s',
+                          outline: 'none',
+                          boxSizing: 'border-box'
+                        }}
+                      >
+                        <option value="">Select a subject</option>
+                        <option value="upgrade">Upgrade My Plan</option>
+                        <option value="support">Technical Support</option>
+                        <option value="question">General Question</option>
+                        <option value="feedback">Feedback</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
 
-                   <div>
-                     <label style={{
-                       display: 'block',
-                       fontSize: '14px',
-                       fontWeight: '500',
-                       color: '#374151',
-                       marginBottom: '8px'
-                     }}>
-                       Message *
-                     </label>
-                     <textarea
-                       name="message"
-                       value={formData.message}
-                       onChange={handleChange}
-                       required
-                       rows={5}
-                       style={{
-                         width: '100%',
-                         padding: '12px 16px',
-                         border: '2px solid #e5e7eb',
-                         borderRadius: '8px',
-                         fontSize: '16px',
-                         transition: 'border-color 0.2s',
-                         outline: 'none',
-                         resize: 'vertical',
-                         boxSizing: 'border-box'
-                       }}
-                       placeholder="Tell us how we can help you..."
-                     />
-                   </div>
+                    <div>
+                      <label style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        fontSize: '14px',
+                        fontWeight: '500',
+                        color: '#374151',
+                        marginBottom: '8px'
+                      }}>
+                        <Icon name="message" size={14} />
+                        Message *
+                      </label>
+                      <textarea
+                        name="message"
+                        value={formData.message}
+                        onChange={handleChange}
+                        required
+                        rows={5}
+                        style={{
+                          width: '100%',
+                          padding: '12px 16px',
+                          border: '2px solid #e5e7eb',
+                          borderRadius: '8px',
+                          fontSize: '16px',
+                          transition: 'border-color 0.2s',
+                          outline: 'none',
+                          resize: 'vertical',
+                          boxSizing: 'border-box'
+                        }}
+                        placeholder="Tell us how we can help you..."
+                      />
+                    </div>
 
-                   <button
-                     type="submit"
-                     disabled={isSubmitting}
-                     style={{
-                       background: '#3b82f6',
-                       color: 'white',
-                       padding: '16px 24px',
-                       borderRadius: '8px',
-                       border: 'none',
-                       fontSize: '16px',
-                       fontWeight: '600',
-                       cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                       opacity: isSubmitting ? 0.7 : 1,
-                       transition: 'all 0.2s'
-                     }}
-                   >
-                     {isSubmitting ? 'Sending...' : 'Send Message'}
-                   </button>
-                 </div>
-               </form>
-             )}
-           </div>
-         </div>
-       </section>
-     </main>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      style={{
+                        background: '#3b82f6',
+                        color: 'white',
+                        padding: '16px 24px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        fontSize: '16px',
+                        fontWeight: '600',
+                        cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                        opacity: isSubmitting ? 0.7 : 1,
+                        transition: 'all 0.2s',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px'
+                      }}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Icon name="loading" size={16} />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Icon name="send" size={16} />
+                          Send Message
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        </section>
+      </main>
 
-     <Footer />
-   </div>
- )
+      <Footer />
+    </div>
+  )
 }
